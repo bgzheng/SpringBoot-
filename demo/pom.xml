@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>basic</module>
+        <module>web</module>
+        <module>business</module>
+    </modules>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.9.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.springboot</groupId>
+    <artifactId>demo</artifactId>
+    <version>1.0</version>
+    <name>demo</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <lombok.version>1.18.10</lombok.version>
+        <ali.durid.version>1.1.14</ali.durid.version>
+        <mybatis.plus.version>3.1.0</mybatis.plus.version>
+        <disruptor.version>3.3.6</disruptor.version>
+        <shiro.version>1.4.0</shiro.version>
+        <shiro-redis.version>2.4.2.1-RELEASE</shiro-redis.version>
+        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <jackson-dataformat-xml.version>2.9.8</jackson-dataformat-xml.version>
+        <httpClient.version>4.5.3</httpClient.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

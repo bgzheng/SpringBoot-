@@ -1,0 +1,184 @@
+profiles: dev
+logging:
+  config: classpath:log4j2-dev.xml
+# 公钥
+public:
+  key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIohb/+KDj8MrP+707QzvGcljTAln1kj51N4t41lMzAz8WldD9ZrARDG3/5wmiXRUxFHNMAN0/5bRwJRdBXophkCAwEAAQ==
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: J4wGu+HC2HGDtZLJQHkC0h0rc1NOVcEBoU8uhC9F4kqsYCf8i4k6KpGBUxuwhaXQnaccHyVSVOMkjHtpLT9Gig==
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/demo?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000;config.decrypt=true;config.decrypt.key=${public.key}
+    #connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    # 最大连接数
+    maxActive: 20
+    # 初始化连接数
+    initialSize: 5
+    # 获取连接时最大等待时间，单位毫秒
+    maxWait: 60000
+    # 最小连接数
+    minIdle: 5
+    # testWhileIdle的判断依据，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+    # 用来检测连接是否有效的sql
+    validationQuery: SELECT 1 FROM DUAL
+    # 不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+    testWhileIdle: true
+    # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+    testOnBorrow: false
+    # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+    testOnReturn: false
+    # 	是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭
+    poolPreparedStatements: false
+    # 	要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
+    # maxPoolPreparedStatementPerConnectionSize: 20
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，监控统计用的filter:stat;日志用的filter:log4j;防御sql注入的filter:wall;密码加密用filter:config
+    filters: stat,wall,log4j2,config
+    monitor:
+      urlMappings: /druid/*
+      webStatFilter: /*
+      #多个以,隔开
+      allow: 127.0.0.1
+      deny:
+      loginUsername:
+      loginPassword:
+      exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      resetEnable: true
+  redis:
+    lettuce:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 20
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+    timeout: 10000ms
+    # redis数据库索引（默认为0）
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+  #消息队列
+  #activemq:
+   # broker-url: tcp://127.0.0.1:61616
+    #集群配置
+    #spring.activemq.broker-url=failover:(tcp://localhost:61616,tcp://localhost:61617)
+   # user: admin
+   # password: admin
+    #pool:
+    #  enabled: true
+     # max-connections: 50
+  rabbitmq:
+    addresses: 127.0.0.1:5672
+    username: guest
+    password: guest
+    publisher-confirms: true
+    publisher-returns: true
+    listener:
+      simple:
+        #手动应答
+        acknowledge-mode: manual
+        #重试机制
+        #retry:
+          #是否开启消费者重试
+          #enabled: true
+          #重试次数
+          #max-attempts: 5
+          #重试间隔时间
+          #initial-interval: 5000ms
+        #重试次数超过上面的设置之后是否丢弃
+        #default-requeue-rejected: true
+    cache:
+      channel:
+        size: 100
+    template:
+      #当mandatory标志位设置为true时，如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue，
+      #那么会调用basic.return方法将消息返还给生产者；当mandatory设为false时，出现上述情形broker会直接将消息扔掉。
+      mandatory: true
+      retry:
+        #生产者端的重试
+        enabled: true
+        initial-interval: 1000ms
+        max-attempts: 3
+        max-interval: 10000ms
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 210MB
+  data:
+    jpa:
+      repositories:
+        #启用jpa
+        enabled: true
+  jpa:
+    # 配置 DBMS 类型
+    database: mysql
+    # 配置是否将执行的 SQL 输出到日志
+    show-sql: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          # 配置开启自动更新表结构
+          auto: update
+        fomat_sql: true
+    #在事务外也可以访问懒加载的数据
+    open-in-view: true
+    #启动时初始化架构。
+    generate-ddl: true
+    hibernate:
+      #每次运行程序，没有表格会新建表格，表内有数据不会清空，只会更新
+      ddl-auto: update
+server:
+  port: 80
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  #typeAliasesPackage: com.springboot.demo.basic.entity
+  global-config:
+    db-config:
+      #主键类型 id_worker auto id_worker_str input none uuid
+      id-type: auto
+      #字段策略 default ignored not_empty not_null
+      field-strategy: default
+      #表名 驼峰下划线转换，默认true
+      #table-underline: true
+      #是否开启 LIKE 查询，即根据 entity 自动生成的 where 条件中 String 类型字段 是否使用 LIKE，默认不开启。
+      column-like: false
+      #数据库类型,默认值为未知的数据库类型 如果值为OTHER,启动时会根据数据库连接 url 获取数据库类型;
+      #db-type: database
+    #是否自动刷新 Mapper 对应的 XML 文件，默认不自动刷新,生产环境改为false
+    refresh: true
+  configuration:
+    #列名 驼峰下划线转换
+    map-underscore-to-camel-case: true
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+shiro:
+  inputPasswordErrorCount: 5
+  inputPasswordErrorWaitSeconds: 86400
+  redis:
+    #reids超时时间 毫秒
+    timeout: 10000
+    #设置过期时间 秒
+    expire: 1800
+  session:
+    #全局会话超时时间，设置为redis过期时间一致 毫秒
+    timeout: 1800000
+    #定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话 毫秒
+    validationInterval: 600000
+    #是否需要用户会话数限制
+    isKichout: true
+    #同一账号限制最大会话数
+    maxCount: 1
