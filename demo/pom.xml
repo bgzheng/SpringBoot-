@@ -33,6 +33,7 @@
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <jackson-dataformat-xml.version>2.10.0</jackson-dataformat-xml.version>
         <httpClient.version>4.5.10</httpClient.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
     </properties>
 
     <dependencies>
